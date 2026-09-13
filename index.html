@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -112,13 +113,153 @@
             background: linear-gradient(135deg, #2563eb, #7c3aed);
             border-radius: 4px;
         }
+
+        /* ========== 弹窗模态框 ========== */
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+}
+
+.modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    background: rgba(30, 41, 59, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    z-index: 10;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ========== 轮播图 ========== */
+.carousel-wrap {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0f172a;
+}
+
+.carousel-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.carousel-item {
+    flex: 0 0 100%;
+    min-width: 100%;
+    height: 100%;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.carousel-btn:hover {
+    background: rgba(37, 99, 235, 0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-prev { left: 16px; }
+.carousel-next { right: 16px; }
+
+.carousel-dots {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.carousel-dots .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.carousel-dots .dot.active {
+    background: #fff;
+    width: 24px;
+    border-radius: 4px;
+}
+
+
     </style>
 </head>
+
 <body class="bg-dark-900 text-gray-100 font-sans antialiased">
     <!-- 导航栏 -->
     <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4">
         <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
-            <a href="#home" class="text-2xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">
+            <a href="#home"
+                class="text-2xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">
                 邵佳伟
             </a>
 
@@ -155,9 +296,13 @@
     <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
         <!-- 背景光效装饰 -->
         <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full filter blur-3xl animate-float"></div>
-            <div class="absolute bottom-20 right-10 w-96 h-96 bg-secondary/20 rounded-full filter blur-3xl animate-float" style="animation-delay: -3s;"></div>
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/10 rounded-full filter blur-3xl"></div>
+            <div class="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full filter blur-3xl animate-float">
+            </div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-secondary/20 rounded-full filter blur-3xl animate-float"
+                style="animation-delay: -3s;"></div>
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/10 rounded-full filter blur-3xl">
+            </div>
         </div>
 
         <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
@@ -175,25 +320,31 @@
                     擅长团队协作与沟通，可胜任软件开发、测试、技术支持等多类岗位。
                 </p>
                 <div class="flex flex-wrap gap-4 pt-4">
-                    <a href="#projects" class="bg-gradient-primary px-8 py-3 rounded-full font-medium hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 transform hover:scale-105">
+                    <a href="#projects"
+                        class="bg-gradient-primary px-8 py-3 rounded-full font-medium hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 transform hover:scale-105">
                         查看项目作品
                     </a>
 
-                    <a href="#contact" class="border border-gray-600 px-8 py-3 rounded-full font-medium hover:border-primary hover:text-primary transition-all duration-300">
+                    <a href="#contact"
+                        class="border border-gray-600 px-8 py-3 rounded-full font-medium hover:border-primary hover:text-primary transition-all duration-300">
                         联系我
                     </a>
-                    <a href="shaojiawei-resume.pdf" download="邵佳伟-软件研发工程师简历.pdf" class="border border-gray-600 px-8 py-3 rounded-full font-medium hover:border-primary hover:text-primary transition-all duration-300">
+                    <a href="shaojiawei-resume.pdf" download="邵佳伟-软件研发工程师简历.pdf"
+                        class="border border-gray-600 px-8 py-3 rounded-full font-medium hover:border-primary hover:text-primary transition-all duration-300">
                         <i class="fa fa-download mr-2"></i>下载简历
                     </a>
                 </div>
                 <div class="flex space-x-6 pt-4">
-                    <a href="mailto:3430844898@qq.com" class="text-gray-400 hover:text-primary text-xl transition-colors duration-300" title="邮箱">
+                    <a href="mailto:3430844898@qq.com"
+                        class="text-gray-400 hover:text-primary text-xl transition-colors duration-300" title="邮箱">
                         <i class="fa fa-envelope"></i>
                     </a>
-                    <a href="tel:15807009187" class="text-gray-400 hover:text-primary text-xl transition-colors duration-300" title="电话">
+                    <a href="tel:15807009187"
+                        class="text-gray-400 hover:text-primary text-xl transition-colors duration-300" title="电话">
                         <i class="fa fa-phone"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-primary text-xl transition-colors duration-300" title="GitHub">
+                    <a href="#" class="text-gray-400 hover:text-primary text-xl transition-colors duration-300"
+                        title="GitHub">
                         <i class="fa fa-github"></i>
                     </a>
                 </div>
@@ -202,9 +353,10 @@
             <div class="flex justify-center">
                 <div class="relative">
                     <div class="w-72 h-72 md:w-80 md:h-80 rounded-full bg-gradient-primary p-1 animate-glow">
-                        <div class="w-full h-full rounded-full bg-dark-800 flex items-center justify-center overflow-hidden">
-                            <img src="头像.jpg" class="w-full h-full object-cover object-center" alt="邵佳伟"> 
-                            
+                        <div
+                            class="w-full h-full rounded-full bg-dark-800 flex items-center justify-center overflow-hidden">
+                            <img src="头像.jpg" class="w-full h-full object-cover object-center" alt="邵佳伟">
+
                         </div>
                     </div>
                     <!-- 浮动标签 -->
@@ -212,7 +364,8 @@
                         <i class="fa fa-code text-primary mr-2"></i>
                         <span class="text-gray-300">全栈开发</span>
                     </div>
-                    <div class="absolute -bottom-4 -left-4 glass px-4 py-2 rounded-full text-sm animate-float" style="animation-delay: -2s;">
+                    <div class="absolute -bottom-4 -left-4 glass px-4 py-2 rounded-full text-sm animate-float"
+                        style="animation-delay: -2s;">
                         <i class="fa fa-graduation-cap text-secondary mr-2"></i>
                         <span class="text-gray-300">本科在读</span>
                     </div>
@@ -254,19 +407,27 @@
 
                     <div class="grid grid-cols-2 gap-4 pt-4">
                         <div class="glass p-4 rounded-xl text-center card-hover">
-                            <div class="text-3xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">3+</div>
+                            <div
+                                class="text-3xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">
+                                3+</div>
                             <div class="text-gray-400 text-sm mt-1">年编程经验</div>
                         </div>
                         <div class="glass p-4 rounded-xl text-center card-hover">
-                            <div class="text-3xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">3个</div>
+                            <div
+                                class="text-3xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">
+                                3个</div>
                             <div class="text-gray-400 text-sm mt-1">核心项目作品</div>
                         </div>
                         <div class="glass p-4 rounded-xl text-center card-hover">
-                            <div class="text-3xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">4门+</div>
+                            <div
+                                class="text-3xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">
+                                4门+</div>
                             <div class="text-gray-400 text-sm mt-1">主流编程语言</div>
                         </div>
                         <div class="glass p-4 rounded-xl text-center card-hover">
-                            <div class="text-3xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">国家级</div>
+                            <div
+                                class="text-3xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">
+                                国家级</div>
                             <div class="text-gray-400 text-sm mt-1">竞赛奖项</div>
                         </div>
                     </div>
@@ -286,7 +447,8 @@
                         </div>
                         <div class="text-gray-400 text-sm leading-relaxed">
                             <p class="mb-2">核心课程：</p>
-                            <p class="text-gray-300">C语言程序设计、数据结构、计算机网络基础、计算机组成原理、操作系统、Java程序设计、C#程序设计、电工电子技术、数据库系统、机械设计基础、软件工程、机械制造技术等</p>
+                            <p class="text-gray-300">
+                                C语言程序设计、数据结构、计算机网络基础、计算机组成原理、操作系统、Java程序设计、C#程序设计、电工电子技术、数据库系统、机械设计基础、软件工程、机械制造技术等</p>
                         </div>
                     </div>
 
@@ -336,7 +498,8 @@
                             <div class="flex flex-wrap gap-2 mt-4">
                                 <span class="bg-white/20 px-3 py-1 rounded-full text-xs text-white">Java</span>
                                 <span class="bg-white/20 px-3 py-1 rounded-full text-xs text-white">Kotlin</span>
-                                <span class="bg-white/20 px-3 py-1 rounded-full text-xs text-white">Android Studio</span>
+                                <span class="bg-white/20 px-3 py-1 rounded-full text-xs text-white">Android
+                                    Studio</span>
                             </div>
                         </div>
                         <div class="md:col-span-3 p-6 space-y-3">
@@ -361,7 +524,8 @@
                 <!-- 项目2 -->
                 <div class="glass rounded-2xl overflow-hidden card-hover">
                     <div class="grid md:grid-cols-5 gap-0">
-                        <div class="md:col-span-2 bg-gradient-to-br from-cyan-500 to-blue-600 p-6 flex flex-col justify-center">
+                        <div
+                            class="md:col-span-2 bg-gradient-to-br from-cyan-500 to-blue-600 p-6 flex flex-col justify-center">
                             <span class="text-white/80 text-sm mb-2">大学生创新创业项目 · 核心成员</span>
                             <h3 class="text-2xl font-bold text-white mb-2">校园一体化服务平台APP</h3>
                             <p class="text-white/70 text-sm">2024.06 - 2026.06</p>
@@ -394,7 +558,8 @@
                 <!-- 项目3 -->
                 <div class="glass rounded-2xl overflow-hidden card-hover">
                     <div class="grid md:grid-cols-5 gap-0">
-                        <div class="md:col-span-2 bg-gradient-to-br from-violet-500 to-purple-600 p-6 flex flex-col justify-center">
+                        <div
+                            class="md:col-span-2 bg-gradient-to-br from-violet-500 to-purple-600 p-6 flex flex-col justify-center">
                             <span class="text-white/80 text-sm mb-2">项目负责人 · 国家级竞赛获奖</span>
                             <h3 class="text-2xl font-bold text-white mb-2">电商平台用户流失预警与挽回策略</h3>
                             <p class="text-white/70 text-sm">2024.04 - 2024.05</p>
@@ -498,7 +663,8 @@
                                 <span class="text-gray-400 text-sm">熟练</span>
                             </div>
                             <div class="h-2 bg-dark-700 rounded-full overflow-hidden">
-                                <div class="skill-bar h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full" style="width: 82%"></div>
+                                <div class="skill-bar h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
+                                    style="width: 82%"></div>
                             </div>
                         </div>
                         <div>
@@ -507,7 +673,8 @@
                                 <span class="text-gray-400 text-sm">熟练</span>
                             </div>
                             <div class="h-2 bg-dark-700 rounded-full overflow-hidden">
-                                <div class="skill-bar h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full" style="width: 80%"></div>
+                                <div class="skill-bar h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
+                                    style="width: 80%"></div>
                             </div>
                         </div>
                         <div>
@@ -516,7 +683,8 @@
                                 <span class="text-gray-400 text-sm">掌握</span>
                             </div>
                             <div class="h-2 bg-dark-700 rounded-full overflow-hidden">
-                                <div class="skill-bar h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full" style="width: 70%"></div>
+                                <div class="skill-bar h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
+                                    style="width: 70%"></div>
                             </div>
                         </div>
                         <div>
@@ -525,7 +693,8 @@
                                 <span class="text-gray-400 text-sm">精通</span>
                             </div>
                             <div class="h-2 bg-dark-700 rounded-full overflow-hidden">
-                                <div class="skill-bar h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full" style="width: 90%"></div>
+                                <div class="skill-bar h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
+                                    style="width: 90%"></div>
                             </div>
                         </div>
                     </div>
@@ -550,9 +719,6 @@
                     <span class="px-4 py-2 bg-dark-700/50 rounded-lg text-gray-300 text-sm border border-gray-700">
                         <i class="fa fa-check text-green-400 mr-2"></i>驾驶证C1
                     </span>
-                    <span class="px-4 py-2 bg-dark-700/50 rounded-lg text-gray-300 text-sm border border-gray-700">
-                        <i class="fa fa-check text-green-400 mr-2"></i>普通话二乙
-                    </span>
                 </div>
             </div>
         </div>
@@ -576,7 +742,8 @@
                     <div class="space-y-6">
                         <div class="relative pl-8 border-l-2 border-primary/30">
                             <div class="absolute -left-2 top-0 w-4 h-4 rounded-full bg-gradient-primary"></div>
-                            <div class="glass p-5 rounded-xl card-hover">
+                            <div class="glass p-5 rounded-xl card-hover cursor-pointer"
+                                data-modal-target="modal-tuangongwei">
                                 <div class="flex justify-between items-start mb-2">
                                     <h4 class="font-semibold">校区团工委 · 学生副书记</h4>
                                     <span class="text-gray-400 text-xs">2025.10 - 2026.10</span>
@@ -591,7 +758,8 @@
 
                         <div class="relative pl-8 border-l-2 border-primary/30">
                             <div class="absolute -left-2 top-0 w-4 h-4 rounded-full bg-gradient-primary"></div>
-                            <div class="glass p-5 rounded-xl card-hover">
+                            <div class="glass p-5 rounded-xl card-hover cursor-pointer"
+                                data-modal-target="modal-xinmeiti">
                                 <div class="flex justify-between items-start mb-2">
                                     <h4 class="font-semibold">校区新媒体中心 · 主任</h4>
                                     <span class="text-gray-400 text-xs">2025.10 - 2026.10</span>
@@ -613,7 +781,8 @@
                     </h3>
                     <div class="space-y-3">
                         <div class="glass p-4 rounded-xl card-hover flex items-center">
-                            <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center mr-4 flex-shrink-0">
+                            <div
+                                class="w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center mr-4 flex-shrink-0">
                                 <i class="fa fa-star text-white"></i>
                             </div>
                             <div>
@@ -623,7 +792,8 @@
                         </div>
 
                         <div class="glass p-4 rounded-xl card-hover flex items-center">
-                            <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center mr-4 flex-shrink-0">
+                            <div
+                                class="w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center mr-4 flex-shrink-0">
                                 <i class="fa fa-star text-white"></i>
                             </div>
                             <div>
@@ -633,7 +803,8 @@
                         </div>
 
                         <div class="glass p-4 rounded-xl card-hover flex items-center">
-                            <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center mr-4 flex-shrink-0">
+                            <div
+                                class="w-10 h-10 rounded-lg bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center mr-4 flex-shrink-0">
                                 <i class="fa fa-star text-white"></i>
                             </div>
                             <div>
@@ -643,7 +814,8 @@
                         </div>
 
                         <div class="glass p-4 rounded-xl card-hover flex items-center">
-                            <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-400 to-cyan-500 flex items-center justify-center mr-4 flex-shrink-0">
+                            <div
+                                class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-400 to-cyan-500 flex items-center justify-center mr-4 flex-shrink-0">
                                 <i class="fa fa-futbol-o text-white"></i>
                             </div>
                             <div>
@@ -653,7 +825,8 @@
                         </div>
 
                         <div class="glass p-4 rounded-xl card-hover flex items-center">
-                            <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-400 to-cyan-500 flex items-center justify-center mr-4 flex-shrink-0">
+                            <div
+                                class="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-400 to-cyan-500 flex items-center justify-center mr-4 flex-shrink-0">
                                 <i class="fa fa-trophy text-white"></i>
                             </div>
                             <div>
@@ -663,7 +836,8 @@
                         </div>
 
                         <div class="glass p-4 rounded-xl card-hover flex items-center">
-                            <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center mr-4 flex-shrink-0">
+                            <div
+                                class="w-10 h-10 rounded-lg bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center mr-4 flex-shrink-0">
                                 <i class="fa fa-line-chart text-white"></i>
                             </div>
                             <div>
@@ -676,6 +850,135 @@
             </div>
         </div>
     </section>
+    <!-- 弹窗1：校区团工委作品详情 -->
+    <div class="modal" id="modal-tuangongwei">
+        <div class="modal-overlay" data-modal-close></div>
+        <div class="modal-content">
+            <button class="modal-close" data-modal-close>
+                <i class="fa fa-times"></i>
+            </button>
+
+            <h3 class="text-xl font-semibold mb-2">校区团工委 · 活动作品展示</h3>
+            <p class="text-gray-400 text-sm mb-4">校园活动策划执行现场纪实</p>
+
+            <!-- 轮播图 -->
+            <div class="carousel-wrap" data-carousel>
+                <div class="carousel-track">
+                    <div class="carousel-item">
+                        <img src="images/活动1.jpg" alt="活动作品1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/活动2.jpg" alt="活动作品2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/活动3.jpg" alt="活动作品3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/活动4.jpg" alt="活动作品4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/活动5.jpg" alt="活动作品5" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/活动6.jpg" alt="活动作品5" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <!-- 左右切换按钮 -->
+                <button class="carousel-btn carousel-prev">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+                <button class="carousel-btn carousel-next">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+
+                <!-- 底部指示点 -->
+                <div class="carousel-dots">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                    <span class="dot" data-index="3"></span>
+                    <span class="dot" data-index="4"></span>
+                    <span class="dot" data-index="5"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 弹窗2：新媒体中心作品详情 -->
+    <div class="modal" id="modal-xinmeiti">
+        <div class="modal-overlay" data-modal-close></div>
+        <div class="modal-content">
+            <button class="modal-close" data-modal-close>
+                <i class="fa fa-times"></i>
+            </button>
+
+            <h3 class="text-xl font-semibold mb-2">个人 · 摄影与设计作品展示</h3>
+            <p class="text-gray-400 text-sm mb-4">校园活动及生活影像作品</p>
+
+            <!-- 轮播图 -->
+            <div class="carousel-wrap" data-carousel>
+                <div class="carousel-track">
+                    <div class="carousel-item">
+                        <img src="photograph images/摄影1.jpg" alt="摄影作品1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="photograph images/摄影2.jpg" alt="摄影作品2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="photograph images/摄影3.jpg" alt="摄影作品3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="photograph images/摄影4.jpg" alt="摄影作品4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="photograph images/摄影5.jpg" alt="摄影作品4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="photograph images/摄影6.jpg" alt="摄影作品4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="photograph images/摄影7.jpg" alt="摄影作品4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="photograph images/摄影8.jpg" alt="摄影作品4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="photograph images/摄影9.jpg" alt="摄影作品4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="photograph images/摄影10.jpg" alt="摄影作品4" class="w-full h-full object-cover">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="photograph images/摄影11.jpg" alt="摄影作品4" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <!-- 左右切换按钮 -->
+                <button class="carousel-btn carousel-prev">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+                <button class="carousel-btn carousel-next">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+
+                <!-- 底部指示点 -->
+                <div class="carousel-dots">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                    <span class="dot" data-index="3"></span>
+                    <span class="dot" data-index="4"></span>
+                    <span class="dot" data-index="5"></span>
+                    <span class="dot" data-index="6"></span>
+                    <span class="dot" data-index="7"></span>
+                    <span class="dot" data-index="8"></span>
+                    <span class="dot" data-index="9"></span>
+                    <span class="dot" data-index="10"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- 联系方式 -->
     <section id="contact" class="py-24 section-reveal">
@@ -698,7 +1001,8 @@
                 </a>
 
                 <a href="tel:15807009187" class="glass p-6 rounded-2xl card-hover block">
-                    <div class="w-14 h-14 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center mx-auto mb-4">
                         <i class="fa fa-phone text-white text-2xl"></i>
                     </div>
                     <h4 class="font-semibold mb-1">联系电话</h4>
@@ -706,15 +1010,18 @@
                 </a>
 
                 <div class="glass p-6 rounded-2xl card-hover">
-                    <div class="w-14 h-14 bg-gradient-to-r from-violet-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-r from-violet-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
                         <i class="fa fa-map-marker text-white text-2xl"></i>
                     </div>
                     <h4 class="font-semibold mb-1">所在城市</h4>
                     <p class="text-gray-400 text-sm">江西省南昌市</p>
                 </div>
 
-                <a href="shaojiawei-resume.pdf" download="邵佳伟-软件研发工程师简历.pdf" class="glass p-6 rounded-2xl card-hover block">
-                    <div class="w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <a href="shaojiawei-resume.pdf" download="邵佳伟-软件研发工程师简历.pdf"
+                    class="glass p-6 rounded-2xl card-hover block">
+                    <div
+                        class="w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-4">
                         <i class="fa fa-file-pdf-o text-white text-2xl"></i>
                     </div>
                     <h4 class="font-semibold mb-1">下载简历</h4>
@@ -785,6 +1092,91 @@
         };
 
         window.addEventListener('scroll', animateSkillBars);
+        // ========== 弹窗控制 ==========
+        document.querySelectorAll('[data-modal-target]').forEach(card => {
+            card.addEventListener('click', () => {
+                const targetId = card.getAttribute('data-modal-target');
+                const modal = document.getElementById(targetId);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // 禁止背景滚动
+            });
+        });
+
+        document.querySelectorAll('[data-modal-close]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const modal = btn.closest('.modal');
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // ESC 键关闭弹窗
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+        });
+
+        // ========== 轮播图控制（3秒自动滚动） ==========
+        document.querySelectorAll('[data-carousel]').forEach(carousel => {
+            const track = carousel.querySelector('.carousel-track');
+            const items = carousel.querySelectorAll('.carousel-item');
+            const prevBtn = carousel.querySelector('.carousel-prev');
+            const nextBtn = carousel.querySelector('.carousel-next');
+            const dots = carousel.querySelectorAll('.dot');
+
+            let current = 0;
+            const total = items.length;
+            let timer = null;
+            const speed = 3000; // 3秒自动切换
+
+            function update() {
+                track.style.transform = `translateX(-${current * 100}%)`;
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
+            }
+
+            function next() {
+                current = (current + 1) % total;
+                update();
+            }
+
+            function prev() {
+                current = (current - 1 + total) % total;
+                update();
+            }
+
+            function startAuto() {
+                stopAuto();
+                timer = setInterval(next, speed);
+            }
+
+            function stopAuto() {
+                if (timer) clearInterval(timer);
+            }
+
+            prevBtn.addEventListener('click', () => { prev(); startAuto(); });
+            nextBtn.addEventListener('click', () => { next(); startAuto(); });
+
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    current = Number(dot.getAttribute('data-index'));
+                    update();
+                    startAuto();
+                });
+            });
+
+            // 鼠标悬停暂停，离开继续
+            carousel.addEventListener('mouseenter', stopAuto);
+            carousel.addEventListener('mouseleave', startAuto);
+
+            update();
+            startAuto();
+        });
+
     </script>
 </body>
+
 </html>
