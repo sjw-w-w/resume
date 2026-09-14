@@ -250,6 +250,42 @@
     border-radius: 4px;
 }
 
+/* 图片骨架屏动画 */
+.img-skeleton {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #1a233a 25%, #24304a 50%, #1a233a 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite linear;
+    z-index: 1;
+    border-radius: 12px;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.carousel-item {
+    position: relative;
+}
+
+.carousel-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+    border-radius: 12px;
+}
+
+.carousel-img.loaded {
+    opacity: 1;
+}
+
 
     </style>
 </head>
@@ -355,7 +391,7 @@
                     <div class="w-72 h-72 md:w-80 md:h-80 rounded-full bg-gradient-primary p-1 animate-glow">
                         <div
                             class="w-full h-full rounded-full bg-dark-800 flex items-center justify-center overflow-hidden">
-                            <img src="头像.jpg" class="w-full h-full object-cover object-center" alt="邵佳伟">
+                            <img src="头像.webp" class="w-full h-full object-cover object-center" alt="邵佳伟">
 
                         </div>
                     </div>
@@ -875,22 +911,27 @@
             <div class="carousel-wrap" data-carousel>
                 <div class="carousel-track">
                     <div class="carousel-item">
-                        <img src="images/活动1.jpg" alt="活动作品1" class="w-full h-full object-cover">
+                        <img src="images/activity1.webp" alt="活动作品1" class="carousel-img loaded">
                     </div>
                     <div class="carousel-item">
-                        <img src="images/活动2.jpg" alt="活动作品2" class="w-full h-full object-cover">
+                        <div class="img-skeleton"></div>
+                        <img data-src="images/activity2.webp" alt="活动作品2" class="carousel-img">
                     </div>
                     <div class="carousel-item">
-                        <img src="images/活动3.jpg" alt="活动作品3" class="w-full h-full object-cover">
+                        <div class="img-skeleton"></div>
+                        <img data-src="images/activity3.webp" alt="活动作品3" class="carousel-img">
                     </div>
                     <div class="carousel-item">
-                        <img src="images/活动4.jpg" alt="活动作品4" class="w-full h-full object-cover">
+                        <div class="img-skeleton"></div>
+                        <img data-src="images/activity4.webp" alt="活动作品4" class="carousel-img">
                     </div>
                     <div class="carousel-item">
-                        <img src="images/活动5.jpg" alt="活动作品5" class="w-full h-full object-cover">
+                        <div class="img-skeleton"></div>
+                        <img data-src="images/activity5.webp" alt="活动作品5" class="carousel-img">
                     </div>
                     <div class="carousel-item">
-                        <img src="images/活动6.jpg" alt="活动作品5" class="w-full h-full object-cover">
+                        <div class="img-skeleton"></div>
+                        <img data-src="images/activity6.webp" alt="活动作品5" class="carousel-img">
                     </div>
                 </div>
 
@@ -930,37 +971,38 @@
             <div class="carousel-wrap" data-carousel>
                 <div class="carousel-track">
                     <div class="carousel-item">
-                        <img src="摄影1.jpg" alt="摄影作品1" class="w-full h-full object-cover" loading="lazy">
+                        <div class="img-skeleton"></div>
+                        <img src="photo1.webp" alt="摄影作品1" class="carousel-img loaded">
                     </div>
                     <div class="carousel-item">
-                        <img src="摄影2.jpg" alt="摄影作品2" class="w-full h-full object-cover" loading="lazy">
+                        <img data-src="photo2.webp" alt="摄影作品2" class="carousel-img">
                     </div>
                     <div class="carousel-item">
-                        <img src="摄影3.jpg" alt="摄影作品3" class="w-full h-full object-cover" loading="lazy">
+                        <img src="photo3.webp" alt="摄影作品3" class="w-full h-full object-cover" loading="lazy">
                     </div>
                     <div class="carousel-item">
-                        <img src="摄影4.jpg" alt="摄影作品4" class="w-full h-full object-cover" loading="lazy">
+                        <img data-src="photo4.webp" alt="摄影作品4" class="carousel-img">
                     </div>
                     <div class="carousel-item">
-                        <img src="摄影5.jpg" alt="摄影作品4" class="w-full h-full object-cover" loading="lazy">
+                        <img data-src="photo5.webp" alt="摄影作品5" class="carousel-img">
                     </div>
                     <div class="carousel-item">
-                        <img src="摄影6.jpg" alt="摄影作品4" class="w-full h-full object-cover" loading="lazy">
+                        <img data-src="photo6.webp" alt="摄影作品6" class="carousel-img">
                     </div>
                     <div class="carousel-item">
-                        <img src="摄影7.jpg" alt="摄影作品4" class="w-full h-full object-cover" loading="lazy">
+                        <img src="photo7.webp" alt="摄影作品7" class="w-full h-full object-cover" loading="lazy">
                     </div>
                     <div class="carousel-item">
-                        <img src="摄影8.jpg" alt="摄影作品4" class="w-full h-full object-cover" loading="lazy">
+                        <img data-src="photo8.webp" alt="摄影作品8" class="carousel-img">
                     </div>
                     <div class="carousel-item">
-                        <img src="摄影9.jpg" alt="摄影作品4" class="w-full h-full object-cover" loading="lazy">
+                        <img data-src="photo9.webp" alt="摄影作品9" class="carousel-img">
                     </div>
                     <div class="carousel-item">
-                        <img src="摄影10.jpg" alt="摄影作品4" class="w-full h-full object-cover" loading="lazy">
+                        <img data-src="photo10.webp" alt="摄影作品10" class="carousel-img">
                     </div>
                     <div class="carousel-item">
-                        <img src="摄影11.jpg" alt="摄影作品4" class="w-full h-full object-cover" loading="lazy">
+                        <img data-src="photo11.webp" alt="摄影作品11" class="carousel-img">
                     </div>
                 </div>
 
@@ -1130,7 +1172,7 @@
             }
         });
 
-        // ========== 轮播图控制（3秒自动滚动） ==========
+        // ========== 轮播图 + 智能预加载 ==========
         document.querySelectorAll('[data-carousel]').forEach(carousel => {
             const track = carousel.querySelector('.carousel-track');
             const items = carousel.querySelectorAll('.carousel-item');
@@ -1141,51 +1183,95 @@
             let current = 0;
             const total = items.length;
             let timer = null;
-            const speed = 3000; // 3秒自动切换
+            const autoPlaySpeed = 3000; // 3秒自动切换
+            const fallbackImage = 'images/fallback.webp'; // 加载失败兜底图
+
+            // 加载单张图片
+            function loadImage(index) {
+                const item = items[index];
+                const img = item.querySelector('.carousel-img');
+                if (!img || img.classList.contains('loaded')) return;
+
+                const src = img.getAttribute('data-src');
+                if (!src) return;
+
+                const tempImg = new Image();
+
+                tempImg.onload = () => {
+                    img.src = src;
+                    img.classList.add('loaded');
+                };
+
+                tempImg.onerror = () => {
+                    // 第一次失败自动重试
+                    if (!img.dataset.retried) {
+                        img.dataset.retried = '1';
+                        tempImg.src = src;
+                    } else {
+                        // 重试失败显示兜底图
+                        img.src = fallbackImage;
+                        img.classList.add('loaded');
+                    }
+                };
+
+                tempImg.src = src;
+            }
+
+            // 预加载下一张
+            function preloadNext() {
+                const nextIndex = (current + 1) % total;
+                loadImage(nextIndex);
+            }
 
             function update() {
                 track.style.transform = `translateX(-${current * 100}%)`;
                 dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
+
+                loadImage(current);  // 加载当前显示的图片
+                preloadNext();      // 提前预加载下一张
             }
 
-            function next() {
+            function nextSlide() {
                 current = (current + 1) % total;
                 update();
             }
 
-            function prev() {
+            function prevSlide() {
                 current = (current - 1 + total) % total;
                 update();
             }
 
-            function startAuto() {
-                stopAuto();
-                timer = setInterval(next, speed);
+            function startAutoPlay() {
+                stopAutoPlay();
+                timer = setInterval(nextSlide, autoPlaySpeed);
             }
 
-            function stopAuto() {
+            function stopAutoPlay() {
                 if (timer) clearInterval(timer);
             }
 
-            prevBtn.addEventListener('click', () => { prev(); startAuto(); });
-            nextBtn.addEventListener('click', () => { next(); startAuto(); });
+            // 事件绑定
+            prevBtn.addEventListener('click', () => { prevSlide(); startAutoPlay(); });
+            nextBtn.addEventListener('click', () => { nextSlide(); startAutoPlay(); });
 
             dots.forEach(dot => {
                 dot.addEventListener('click', () => {
-                    current = Number(dot.getAttribute('data-index'));
+                    current = Number(dot.dataset.index);
                     update();
-                    startAuto();
+                    startAutoPlay();
                 });
             });
 
             // 鼠标悬停暂停，离开继续
-            carousel.addEventListener('mouseenter', stopAuto);
-            carousel.addEventListener('mouseleave', startAuto);
+            carousel.addEventListener('mouseenter', stopAutoPlay);
+            carousel.addEventListener('mouseleave', startAutoPlay);
 
+            // 初始化：加载第一张 + 预加载第二张
+            loadImage(0);
+            preloadNext();
             update();
-            startAuto();
+            startAutoPlay();
         });
-
     </script>
 </body>
 
