@@ -125,6 +125,7 @@
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
+    padding: 20px; /* 手机端四周留边 */
 }
 
 .modal.active {
@@ -143,6 +144,7 @@
     position: relative;
     width: 90%;
     max-width: 800px;
+    max-height: 85vh;
     background: rgba(30, 41, 59, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
@@ -150,6 +152,23 @@
     transform: scale(0.9);
     transition: transform 0.3s ease;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;           /* 关键：内容超出时内部滚动 */
+    overflow-x: hidden;
+}
+
+* 自定义滚动条，更精致 */
+.modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+.modal-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .modal.active .modal-content {
@@ -157,9 +176,9 @@
 }
 
 .modal-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
+    position: sticky;          /* 改成sticky，关闭按钮始终可见 */
+    top: 0;
+    float: right;               /* 右上角定位 */
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -171,6 +190,7 @@
     cursor: pointer;
     transition: background 0.2s;
     z-index: 10;
+    margin-bottom: 8px;
 }
 
 .modal-close:hover {
@@ -185,6 +205,7 @@
     border-radius: 12px;
     overflow: hidden;
     background: #0f172a;
+    margin: 12px 0;
 }
 
 .carousel-track {
@@ -285,7 +306,23 @@
 .carousel-img.loaded {
     opacity: 1;
 }
+/* 代码块样式 */
+.code-block {
+    background: #0f172a;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #94a3b8;
+    font-family: Consolas, Monaco, monospace;
+    margin: 0;
+}
 
+.code-block code {
+    font-family: inherit;
+}
 
     </style>
 </head>
@@ -525,7 +562,8 @@
 
             <div class="space-y-8">
                 <!-- 项目1 -->
-                <div class="glass rounded-2xl overflow-hidden card-hover">
+                <div class="glass rounded-2xl overflow-hidden card-hover cursor-pointer"
+                    data-modal-target="modal-android">
                     <div class="grid md:grid-cols-5 gap-0">
                         <div class="md:col-span-2 bg-gradient-primary p-6 flex flex-col justify-center">
                             <span class="text-white/80 text-sm mb-2">个人项目</span>
@@ -553,12 +591,17 @@
                                     <span>针对关键功能执行30+次单元测试与集成测试，修复10个程序崩溃问题，确保应用稳定运行。</span>
                                 </li>
                             </ul>
+                            <div class="mt-3 text-right text-xs text-gray-500 flex items-center justify-end gap-1.5">
+                                <i class="fa fa-picture-o"></i>
+                                <span>点击查看详情</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- 项目2 -->
-                <div class="glass rounded-2xl overflow-hidden card-hover">
+                <div class="glass rounded-2xl overflow-hidden card-hover cursor-pointer"
+                    data-modal-target="modal-campus">
                     <div class="grid md:grid-cols-5 gap-0">
                         <div
                             class="md:col-span-2 bg-gradient-to-br from-cyan-500 to-blue-600 p-6 flex flex-col justify-center">
@@ -587,12 +630,17 @@
                                     <span>集成SQLite与MySQL数据库实现用户数据存储，通过API接口对接校园信息管理系统。</span>
                                 </li>
                             </ul>
+                            <div class="mt-3 text-right text-xs text-gray-500 flex items-center justify-end gap-1.5">
+                                <i class="fa fa-picture-o"></i>
+                                <span>点击查看详情</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- 项目3 -->
-                <div class="glass rounded-2xl overflow-hidden card-hover">
+                <div class="glass rounded-2xl overflow-hidden card-hover cursor-pointer"
+                    data-modal-target="modal-churn">
                     <div class="grid md:grid-cols-5 gap-0">
                         <div
                             class="md:col-span-2 bg-gradient-to-br from-violet-500 to-purple-600 p-6 flex flex-col justify-center">
@@ -625,6 +673,10 @@
                                     <span class="text-yellow-400 font-medium">最终获得全国大学生数学建模竞赛参与奖</span>
                                 </li>
                             </ul>
+                            <div class="mt-3 text-right text-xs text-gray-500 flex items-center justify-end gap-1.5">
+                                <i class="fa fa-picture-o"></i>
+                                <span>点击查看详情</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -898,6 +950,8 @@
             </div>
         </div>
     </section>
+
+    <!--所有弹窗功能-->
     <!-- 弹窗1：校区团工委作品详情 -->
     <div class="modal" id="modal-tuangongwei">
         <div class="modal-overlay" data-modal-close></div>
@@ -1033,6 +1087,788 @@
             </div>
         </div>
     </div>
+
+    <!-- 弹窗：Android移动端软件开发 详情 -->
+    <div class="modal" id="modal-android">
+        <div class="modal-overlay" data-modal-close></div>
+        <div class="modal-content">
+            <button class="modal-close" data-modal-close>
+                <i class="fa fa-times"></i>
+            </button>
+
+            <!-- 项目标题 -->
+            <div class="mb-5">
+                <h3 class="text-xl font-bold mb-2">Android移动端软件开发</h3>
+                <div class="flex flex-wrap gap-2 mb-2">
+                    <span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs">Java</span>
+                    <span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs">Kotlin</span>
+                    <span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs">Android Studio</span>
+                </div>
+                <p class="text-gray-400 text-sm">个人项目 · 2025.06 - 2025.07</p>
+            </div>
+
+            <!-- 界面截图轮播 -->
+            <p class="text-gray-300 text-sm font-medium mb-3">📱 应用界面展示</p>
+            <div class="carousel-wrap mb-6" data-carousel>
+                <div class="carousel-track">
+                    <!-- 第1张：默认加载 -->
+                    <div class="carousel-item">
+                        <img src="images/android_ui1.webp" alt="登录界面" class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <!-- 后续图片：原生懒加载 -->
+                    <div class="carousel-item">
+                        <img src="images/android_ui2.webp" alt="列表页面" loading="lazy"
+                            class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/android_ui3.webp" alt="详情页面" loading="lazy"
+                            class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/android_ui4.webp" alt="个人中心" loading="lazy"
+                            class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="android_build.webp" alt="环境搭建" loading="lazy"
+                            class="w-full h-full object-cover rounded-lg">
+                    </div>
+                </div>
+
+                <!-- 左右切换按钮 -->
+                <button class="carousel-btn carousel-prev">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+                <button class="carousel-btn carousel-next">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+
+                <!-- 底部指示点 -->
+                <div class="carousel-dots">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                    <span class="dot" data-index="3"></span>
+                    <span class="dot" data-index="4"></span>
+                </div>
+            </div>
+
+            <!-- 核心技术实现 -->
+            <div class="mb-5">
+                <p class="text-gray-300 text-sm font-medium mb-3">🔧 核心技术实现</p>
+                <ul class="text-gray-400 text-sm space-y-2">
+                    <li class="flex items-start gap-2">
+                        <span class="text-blue-400 mt-0.5">●</span>
+                        <span><strong>界面布局：</strong>使用 ConstraintLayout 约束布局完成 20+ 交互界面，配合 RecyclerView 实现列表复用，适配 8
+                            种主流分辨率，多屏一致性达 98%</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-blue-400 mt-0.5">●</span>
+                        <span><strong>数据存储：</strong>封装 SharedPreferences 配置存储 + SQLite
+                            本地数据库，实现用户信息、业务数据的持久化缓存，离线状态可正常浏览核心内容</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-blue-400 mt-0.5">●</span>
+                        <span><strong>网络请求：</strong>基于 OkHttp 封装统一网络请求工具类，统一处理异常、超时与回调，覆盖登录、数据加载等全量接口</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-blue-400 mt-0.5">●</span>
+                        <span><strong>质量保证：</strong>执行 30+ 单元测试与集成测试用例，修复 10+ 崩溃与边界问题，核心路径崩溃率降至 0.5% 以下</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 核心代码片段 -->
+            <div>
+                <p class="text-gray-300 text-sm font-medium mb-3">💻 核心代码示例</p>
+                <pre class="code-block">
+<code>// RecyclerView 适配器核心简化示例
+public class CommonAdapter extends RecyclerView.Adapter<ViewHolder> {
+    private List<DataBean> mData;
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_common, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        DataBean bean = mData.get(position);
+        holder.title.setText(bean.getTitle());
+        // 数据绑定与点击事件处理
+    }
+
+    @Override
+    public int getItemCount() {
+        return mData == null ? 0 : mData.size();
+    }
+}</code>
+            </pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- 弹窗：校园一体化服务平台APP 详情 -->
+    <div class="modal" id="modal-campus">
+        <div class="modal-overlay" data-modal-close></div>
+        <div class="modal-content">
+            <button class="modal-close" data-modal-close>
+                <i class="fa fa-times"></i>
+            </button>
+
+            <!-- 项目标题 -->
+            <div class="mb-5">
+                <h3 class="text-xl font-bold mb-2">校园一体化服务平台 · 校翼助手</h3>
+                <div class="flex flex-wrap gap-2 mb-2">
+                    <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs">Android</span>
+                    <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs">Java</span>
+                    <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs">SQLite</span>
+                    <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs">MySQL</span>
+                </div>
+                <p class="text-gray-400 text-sm">省级创新创业训练项目 · 核心开发成员 · 2024.06 - 2026.06</p>
+            </div>
+
+            <!-- 设计与实现 轮播 -->
+            <p class="text-gray-300 text-sm font-medium mb-3">📐 项目设计与实现</p>
+            <div class="carousel-wrap mb-6" data-carousel>
+                <div class="carousel-track">
+                    <!-- 第1页：真实运行界面 -->
+                    <div class="carousel-item flex items-center justify-center bg-dark-800/60 rounded-lg">
+                        <img src="campus_login.webp" alt="校翼助手登录页" class="h-full object-contain rounded-lg">
+                    </div>
+
+                    <!-- 第2页：功能架构全景 -->
+                    <div class="carousel-item p-4 bg-dark-800/60 rounded-lg overflow-y-auto">
+                        <p class="text-center text-white font-medium mb-4">四大功能模块架构</p>
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="p-3 rounded bg-cyan-500/10 border border-cyan-500/20">
+                                <p class="text-cyan-300 font-bold mb-2">生活服务</p>
+                                <ul class="text-gray-400 space-y-1">
+                                    <li>• 校园卡在线充值/挂失</li>
+                                    <li>• 网费电费一键缴纳</li>
+                                    <li>• 物业设施报修反馈</li>
+                                    <li>• 宿舍信息通知推送</li>
+                                    <li>• 浴室/洗衣机状态查询</li>
+                                </ul>
+                            </div>
+                            <div class="p-3 rounded bg-blue-500/10 border border-blue-500/20">
+                                <p class="text-blue-300 font-bold mb-2">学习服务</p>
+                                <ul class="text-gray-400 space-y-1">
+                                    <li>• 学霸帮O2O答疑平台</li>
+                                    <li>• 图书馆在馆人数查询</li>
+                                    <li>• 课程表自动导入</li>
+                                    <li>• 成绩/GPA计算器</li>
+                                </ul>
+                            </div>
+                            <div class="p-3 rounded bg-purple-500/10 border border-purple-500/20">
+                                <p class="text-purple-300 font-bold mb-2">教务工作</p>
+                                <ul class="text-gray-400 space-y-1">
+                                    <li>• 空教室实时查询</li>
+                                    <li>• 教室在线借用审批</li>
+                                    <li>• 可视化选座预约</li>
+                                </ul>
+                            </div>
+                            <div class="p-3 rounded bg-green-500/10 border border-green-500/20">
+                                <p class="text-green-300 font-bold mb-2">个人中心</p>
+                                <ul class="text-gray-400 space-y-1">
+                                    <li>• 个性化消息推送</li>
+                                    <li>• 校园账号统一认证</li>
+                                    <li>• 系统设置与反馈</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 第3页：核心业务流程 -->
+                    <div class="carousel-item p-4 bg-dark-800/60 rounded-lg overflow-y-auto">
+                        <p class="text-center text-white font-medium mb-4">核心业务流程设计</p>
+                        <div class="space-y-4 text-xs">
+                            <div>
+                                <p class="text-cyan-300 font-medium mb-2">▌教室借用流程</p>
+                                <div class="flex items-center justify-between text-gray-300">
+                                    <div class="text-center">
+                                        <div
+                                            class="w-10 h-10 mx-auto rounded-full bg-cyan-500/20 flex items-center justify-center mb-1">
+                                            <i class="fa fa-edit"></i>
+                                        </div>
+                                        <span>在线申请</span>
+                                    </div>
+                                    <i class="fa fa-arrow-right text-gray-600"></i>
+                                    <div class="text-center">
+                                        <div
+                                            class="w-10 h-10 mx-auto rounded-full bg-cyan-500/20 flex items-center justify-center mb-1">
+                                            <i class="fa fa-check-square-o"></i>
+                                        </div>
+                                        <span>自动审批</span>
+                                    </div>
+                                    <i class="fa fa-arrow-right text-gray-600"></i>
+                                    <div class="text-center">
+                                        <div
+                                            class="w-10 h-10 mx-auto rounded-full bg-cyan-500/20 flex items-center justify-center mb-1">
+                                            <i class="fa fa-bell"></i>
+                                        </div>
+                                        <span>结果通知</span>
+                                    </div>
+                                    <i class="fa fa-arrow-right text-gray-600"></i>
+                                    <div class="text-center">
+                                        <div
+                                            class="w-10 h-10 mx-auto rounded-full bg-cyan-500/20 flex items-center justify-center mb-1">
+                                            <i class="fa fa-key"></i>
+                                        </div>
+                                        <span>扫码使用</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-cyan-300 font-medium mb-2">▌校园卡充值流程</p>
+                                <div class="flex items-center justify-between text-gray-300">
+                                    <div class="text-center">
+                                        <div
+                                            class="w-10 h-10 mx-auto rounded-full bg-blue-500/20 flex items-center justify-center mb-1">
+                                            <i class="fa fa-credit-card"></i>
+                                        </div>
+                                        <span>发起充值</span>
+                                    </div>
+                                    <i class="fa fa-arrow-right text-gray-600"></i>
+                                    <div class="text-center">
+                                        <div
+                                            class="w-10 h-10 mx-auto rounded-full bg-blue-500/20 flex items-center justify-center mb-1">
+                                            <i class="fa fa-lock"></i>
+                                        </div>
+                                        <span>支付校验</span>
+                                    </div>
+                                    <i class="fa fa-arrow-right text-gray-600"></i>
+                                    <div class="text-center">
+                                        <div
+                                            class="w-10 h-10 mx-auto rounded-full bg-blue-500/20 flex items-center justify-center mb-1">
+                                            <i class="fa fa-database"></i>
+                                        </div>
+                                        <span>余额同步</span>
+                                    </div>
+                                    <i class="fa fa-arrow-right text-gray-600"></i>
+                                    <div class="text-center">
+                                        <div
+                                            class="w-10 h-10 mx-auto rounded-full bg-blue-500/20 flex items-center justify-center mb-1">
+                                            <i class="fa fa-check"></i>
+                                        </div>
+                                        <span>到账回执</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 第4页：技术栈图谱 -->
+                    <div class="carousel-item p-4 bg-dark-800/60 rounded-lg overflow-y-auto">
+                        <p class="text-center text-white font-medium mb-4">技术架构分层</p>
+                        <div class="space-y-2 text-xs">
+                            <div class="p-2 rounded bg-purple-500/10 border border-purple-500/20 text-center">
+                                <p class="text-purple-300 font-medium mb-1">前端表现层</p>
+                                <div class="flex flex-wrap justify-center gap-1">
+                                    <span class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">Android Native</span>
+                                    <span class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">Java</span>
+                                    <span
+                                        class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">ConstraintLayout</span>
+                                    <span class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">RecyclerView</span>
+                                </div>
+                            </div>
+                            <div class="text-center text-gray-600">↑ 接口封装 ↑</div>
+                            <div class="p-2 rounded bg-blue-500/10 border border-blue-500/20 text-center">
+                                <p class="text-blue-300 font-medium mb-1">业务逻辑层</p>
+                                <div class="flex flex-wrap justify-center gap-1">
+                                    <span class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">OkHttp网络请求</span>
+                                    <span class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">数据持久化</span>
+                                    <span class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">状态管理</span>
+                                </div>
+                            </div>
+                            <div class="text-center text-gray-600">↑ 数据同步 ↑</div>
+                            <div class="p-2 rounded bg-cyan-500/10 border border-cyan-500/20 text-center">
+                                <p class="text-cyan-300 font-medium mb-1">数据层</p>
+                                <div class="flex flex-wrap justify-center gap-1">
+                                    <span class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">SQLite 本地缓存</span>
+                                    <span class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">MySQL 后端数据库</span>
+                                    <span
+                                        class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">SharedPreferences</span>
+                                </div>
+                            </div>
+                            <div class="text-center text-gray-600">↑ 对接学校系统 ↑</div>
+                            <div class="p-2 rounded bg-green-500/10 border border-green-500/20 text-center">
+                                <p class="text-green-300 font-medium mb-1">基础设施层</p>
+                                <div class="flex flex-wrap justify-center gap-1">
+                                    <span class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">校园教务系统API</span>
+                                    <span class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">卡务中心接口</span>
+                                    <span class="px-2 py-0.5 rounded bg-gray-700/50 text-gray-300">图书馆门禁数据</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="carousel-btn carousel-prev">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+                <button class="carousel-btn carousel-next">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+
+                <div class="carousel-dots">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                    <span class="dot" data-index="3"></span>
+                </div>
+            </div>
+
+            <!-- 项目背景与痛点 -->
+            <div class="mb-5">
+                <p class="text-gray-300 text-sm font-medium mb-3">🎯 项目背景与核心痛点</p>
+                <div class="grid grid-cols-1 gap-2 text-sm">
+                    <div class="flex items-start gap-2">
+                        <span class="text-cyan-400 mt-0.5">▌</span>
+                        <span class="text-gray-400">教室借用流程繁琐：纸质申请+人工审批耗时8-10分钟，临时借用常因老师下班无法办理</span>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="text-cyan-400 mt-0.5">▌</span>
+                        <span class="text-gray-400">校园服务入口分散：充值、报修、查询分属不同系统，学生需往返多个地点与平台</span>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="text-cyan-400 mt-0.5">▌</span>
+                        <span class="text-gray-400">信息触达效率低：校级通知广播式推送，与个人相关的重要信息易被淹没遗漏</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 我的核心工作 -->
+            <div class="mb-5">
+                <p class="text-gray-300 text-sm font-medium mb-3">💼 个人核心产出</p>
+                <ul class="text-gray-400 text-sm space-y-2">
+                    <li class="flex items-start gap-2">
+                        <span class="text-cyan-400 mt-0.5">●</span>
+                        <span>主导APP产品架构设计，完成<strong>生活、学习、工作、个人中心</strong>四大模块的功能拆解与交互设计</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-cyan-400 mt-0.5">●</span>
+                        <span>负责<strong>首页轮播、空教室查询、教室借用、本地缓存</strong>等核心模块的代码开发与联调测试</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-cyan-400 mt-0.5">●</span>
+                        <span>设计实现SQLite+MySQL双库数据同步方案，离线状态可正常浏览核心数据，弱网体验提升60%</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-cyan-400 mt-0.5">●</span>
+                        <span>对接学校教务与卡务系统接口，完成用户、课程、校园卡数据的打通与校验</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 核心代码示例（替换为真实代码） -->
+            <div class="mb-5">
+                <p class="text-gray-300 text-sm font-medium mb-3">💻 核心代码实现</p>
+
+                <p class="text-gray-400 text-xs mb-2">▌ViewPager 轮播适配器核心实现</p>
+                <pre class="code-block mb-4">
+<code>public class ActionAdapter extends PagerAdapter {
+    private List<DataBean> datas = null;
+    private Context mContext;
+
+    public ActionAdapter(Context mContext, List<DataBean> datas) {
+        this.mContext = mContext;
+        this.datas = datas;
+    }
+
+    @Override
+    public int getCount() {
+        return datas.size();
+    }
+
+    @Override
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+        return view == object;
+    }
+
+    @NonNull
+    @Override
+    public Object instantiateItem(@NonNull ViewGroup container, final int position) {
+        ImageView view = new ImageView(mContext);
+        view.setScaleType(ImageView.ScaleType.FIT_XY);
+        // Glide 加载图片
+        Glide.with(mContext)
+                .load(datas.get(position).imageUrl)
+                .into(view);
+        container.addView(view);
+        // 点击事件
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, datas.get(position).title, Toast.LENGTH_SHORT).show();
+            }
+        });
+        return view;
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        container.removeView((View) object);
+    }
+}</code>
+            </pre>
+
+                <p class="text-gray-400 text-xs mb-2">▌Banner 轮播布局 XML</p>
+                <pre class="code-block mb-4">
+<code><?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:orientation="vertical">
+
+    <com.youth.banner.Banner
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        app:indicator_height="5dp"
+        app:indicator_normal_width="5dp"
+        app:indicator_selected_width="7dp"
+        app:indicator_selected_color="#ff0000"
+        app:is_auto_loop="true" />
+
+</LinearLayout></code>
+            </pre>
+
+                <p class="text-gray-400 text-xs mb-2">▌依赖与构建配置</p>
+                <pre class="code-block">
+<code>android {
+    compileSdkVersion 32
+    buildToolsVersion "30.0.0"
+
+    defaultConfig {
+        applicationId "com.example.myshoppingapp"
+        minSdkVersion 29
+        targetSdkVersion 32
+        versionCode 1
+        versionName "1.0"
+    }
+
+    dependencies {
+        implementation 'androidx.appcompat:appcompat:1.4.1'
+        implementation 'com.google.android.material:material:1.5.0'
+        implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+        // 轮播组件
+        implementation 'io.github.youth201314:banner:2.2.3'
+        // 图片加载
+        implementation 'com.github.bumptech.glide:glide:4.11.0'
+        annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    }
+}</code>
+            </pre>
+            </div>
+
+            <!-- 项目创新点 -->
+            <div>
+                <p class="text-gray-300 text-sm font-medium mb-3">✨ 项目创新特色</p>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="p-3 rounded bg-dark-800/60 border border-gray-700/50">
+                        <p class="text-white font-medium mb-1">全场景校园管家</p>
+                        <p class="text-gray-400">覆盖生活学习工作四大场景，一站式解决90%校园日常事务</p>
+                    </div>
+                    <div class="p-3 rounded bg-dark-800/60 border border-gray-700/50">
+                        <p class="text-white font-medium mb-1">O2O学习互助</p>
+                        <p class="text-gray-400">学霸帮线上提问+线下讲解模式，打造校园学习社群</p>
+                    </div>
+                    <div class="p-3 rounded bg-dark-800/60 border border-gray-700/50">
+                        <p class="text-white font-medium mb-1">精准消息推送</p>
+                        <p class="text-gray-400">基于学号姓名匹配官网信息，个人级精准通知不遗漏</p>
+                    </div>
+                    <div class="p-3 rounded bg-dark-800/60 border border-gray-700/50">
+                        <p class="text-white font-medium mb-1">离线可用设计</p>
+                        <p class="text-gray-400">本地缓存核心数据，无网络环境仍可查询课表与教室</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 弹窗：电商用户流失预警与挽回策略 详情 -->
+    <div class="modal" id="modal-churn">
+        <div class="modal-overlay" data-modal-close></div>
+        <div class="modal-content">
+            <button class="modal-close" data-modal-close>
+                <i class="fa fa-times"></i>
+            </button>
+
+            <!-- 项目标题 -->
+            <div class="mb-5">
+                <h3 class="text-xl font-bold mb-2">电商平台用户流失预警与挽回策略</h3>
+                <div class="flex flex-wrap gap-2 mb-2">
+                    <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs">Python</span>
+                    <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs">MySQL</span>
+                    <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs">数据挖掘</span>
+                    <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs">用户画像</span>
+                </div>
+                <p class="text-gray-400 text-sm">2024 第十届全国大学生统计建模大赛 · 本科生组 · 负责人</p>
+            </div>
+
+            <!-- 分析全景 轮播 -->
+            <p class="text-gray-300 text-sm font-medium mb-3">📊 数据分析全景</p>
+            <div class="carousel-wrap mb-6" data-carousel>
+                <div class="carousel-track">
+
+                    <!-- 第1页：转化漏斗（核心数据发现） -->
+                    <div class="carousel-item p-4 bg-dark-800/60 rounded-lg overflow-y-auto">
+                        <p class="text-center text-white font-medium mb-1">用户行为转化漏斗</p>
+                        <p class="text-center text-gray-500 text-xs mb-4">数据源：阿里云天池 · 淘宝用户行为数据集</p>
+                        <div class="space-y-2">
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-gray-300">浏览商品详情 PV</span>
+                                    <span class="text-amber-300 font-bold">~90%</span>
+                                </div>
+                                <div class="h-5 rounded bg-amber-500/70" style="width:90%"></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-gray-300">加购 / 收藏</span>
+                                    <span class="text-amber-300 font-bold">8.2%</span>
+                                </div>
+                                <div class="h-5 rounded bg-amber-500/50" style="width:45%"></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-gray-300">下单购买</span>
+                                    <span class="text-red-400 font-bold">2.1%</span>
+                                </div>
+                                <div class="h-5 rounded bg-red-500/60" style="width:18%"></div>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-xs mt-4 leading-relaxed">
+                            ▶ 从浏览到购买的流失率高达 <span class="text-red-400">97.9%</span>，加购后未支付是最主要流失节点，为挽回策略提供精准切入点。
+                        </p>
+                    </div>
+
+                    <!-- 第2页：活跃度衰减模型 -->
+                    <div class="carousel-item p-4 bg-dark-800/60 rounded-lg overflow-y-auto">
+                        <p class="text-center text-white font-medium mb-4">用户活跃度加权衰减模型</p>
+                        <div class="bg-dark-900/60 rounded p-3 mb-3 border border-amber-500/20 text-center">
+                            <p class="text-gray-400 text-xs mb-1">衰减系数</p>
+                            <p class="text-amber-300 font-mono text-sm">W(x) = 1 / 1.07<sup>(x-1)</sup></p>
+                        </div>
+                        <div class="bg-dark-900/60 rounded p-3 mb-3 border border-amber-500/20 text-center">
+                            <p class="text-gray-400 text-xs mb-1">用户活跃分</p>
+                            <p class="text-amber-300 font-mono text-sm">Score = Σ W(DAY<sub>i</sub>)</p>
+                        </div>
+                        <div class="text-xs text-gray-400 space-y-1">
+                            <p>▌ 距离预测期越近，行为权重越高（指数衰减）</p>
+                            <p>▌ DAY<sub>i</sub> = 第 i 天是否来访（0 / 1）</p>
+                            <p>▌ 通过 Score 划分高/中/低活跃用户群，识别潜在流失用户</p>
+                        </div>
+                    </div>
+
+                    <!-- 第3页：挽回策略框架 -->
+                    <div class="carousel-item p-4 bg-dark-800/60 rounded-lg overflow-y-auto">
+                        <p class="text-center text-white font-medium mb-4">四维挽回策略 + 效果评估</p>
+                        <div class="grid grid-cols-2 gap-2 text-xs mb-4">
+                            <div class="p-2.5 rounded bg-amber-500/10 border border-amber-500/20">
+                                <p class="text-amber-300 font-medium mb-1">🎯 个性化优惠</p>
+                                <p class="text-gray-400">按购买偏好推送折扣/赠品</p>
+                            </div>
+                            <div class="p-2.5 rounded bg-amber-500/10 border border-amber-500/20">
+                                <p class="text-amber-300 font-medium mb-1">🤝 专属服务</p>
+                                <p class="text-gray-400">专属客服 + 提升售后时效</p>
+                            </div>
+                            <div class="p-2.5 rounded bg-amber-500/10 border border-amber-500/20">
+                                <p class="text-amber-300 font-medium mb-1">💝 客户关怀</p>
+                                <p class="text-gray-400">节日祝福 / 生日券增强归属</p>
+                            </div>
+                            <div class="p-2.5 rounded bg-amber-500/10 border border-amber-500/20">
+                                <p class="text-amber-300 font-medium mb-1">⚡ 投诉响应</p>
+                                <p class="text-gray-400">及时处理投诉提升满意度</p>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-700 pt-3">
+                            <p class="text-gray-300 text-xs font-medium mb-2">📏 四大评估指标</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2 py-1 rounded bg-gray-700/40 text-gray-300">客户满意度</span>
+                                <span class="px-2 py-1 rounded bg-gray-700/40 text-gray-300">回购率</span>
+                                <span class="px-2 py-1 rounded bg-gray-700/40 text-gray-300">流失率</span>
+                                <span class="px-2 py-1 rounded bg-gray-700/40 text-gray-300">销售额变化</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 第4页：分析技术流程 -->
+                    <div class="carousel-item p-4 bg-dark-800/60 rounded-lg overflow-y-auto">
+                        <p class="text-center text-white font-medium mb-4">数据分析全流程</p>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center flex-shrink-0">1</span>
+                                <div>
+                                    <p class="text-gray-200 font-medium">数据采集</p>
+                                    <p class="text-gray-500">天池淘宝行为数据集（PV/加购/收藏/购买）</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center flex-shrink-0">2</span>
+                                <div>
+                                    <p class="text-gray-200 font-medium">数据清洗与入库</p>
+                                    <p class="text-gray-500">MySQL 建表、去重、缺失值处理</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center flex-shrink-0">3</span>
+                                <div>
+                                    <p class="text-gray-200 font-medium">多维指标分析</p>
+                                    <p class="text-gray-500">产品 × 用户 × 行为三维度拆解</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center flex-shrink-0">4</span>
+                                <div>
+                                    <p class="text-gray-200 font-medium">预警模型构建</p>
+                                    <p class="text-gray-500">活跃衰减打分 + 分类算法识别流失</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center flex-shrink-0">5</span>
+                                <div>
+                                    <p class="text-gray-200 font-medium">挽回策略输出</p>
+                                    <p class="text-gray-500">分层用户 × 个性化触达 × 效果评估</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button class="carousel-btn carousel-prev">
+                    <i class="fa fa-chevron-left"></i>
+                </button>
+                <button class="carousel-btn carousel-next">
+                    <i class="fa fa-chevron-right"></i>
+                </button>
+
+                <div class="carousel-dots">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                    <span class="dot" data-index="3"></span>
+                </div>
+            </div>
+
+            <!-- 研究背景与痛点 -->
+            <div class="mb-5">
+                <p class="text-gray-300 text-sm font-medium mb-3">🎯 研究背景与业务价值</p>
+                <div class="grid grid-cols-1 gap-2 text-sm">
+                    <div class="flex items-start gap-2">
+                        <span class="text-amber-400 mt-0.5">▌</span>
+                        <span class="text-gray-400">流失率每降低 5%，可为企业带来 <strong class="text-amber-300">30%~85%</strong>
+                            的利润增长；获取新客成本是挽留老客的 5~7 倍</span>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="text-amber-400 mt-0.5">▌</span>
+                        <span class="text-gray-400">用户流失集中在特定节点：大促后、服务质量下降期，需重点监控</span>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="text-amber-400 mt-0.5">▌</span>
+                        <span class="text-gray-400">流失原因：体验不佳、价格无竞争力、缺乏个性化推荐、竞品吸引</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 个人核心工作 -->
+            <div class="mb-5">
+                <p class="text-gray-300 text-sm font-medium mb-3">💼 个人核心产出</p>
+                <ul class="text-gray-400 text-sm space-y-2">
+                    <li class="flex items-start gap-2">
+                        <span class="text-amber-400 mt-0.5">●</span>
+                        <span>统筹数据采集与清洗流程，将天池淘宝行为数据集导入 <strong>MySQL</strong>，完成 PV/加购/收藏/购买四类行为的统计与可视化</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-amber-400 mt-0.5">●</span>
+                        <span>设计<strong>用户活跃度加权衰减模型</strong>，以 1/1.07^(x-1) 指数衰减计算活跃分，量化识别潜在流失用户</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-amber-400 mt-0.5">●</span>
+                        <span>从产品、用户、行为三维度拆解流失链路，定位「加购后未支付」为核心流失节点</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-amber-400 mt-0.5">●</span>
+                        <span>基于淘宝、亚马逊案例对比，输出四维挽回策略与四项效果评估指标体系</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 核心分析代码/SQL -->
+            <div class="mb-5">
+                <p class="text-gray-300 text-sm font-medium mb-3">💻 核心数据分析</p>
+
+                <p class="text-gray-400 text-xs mb-2">▌MySQL 用户行为统计</p>
+                <pre class="code-block mb-4">
+<code>-- 统计四类用户行为占比
+SELECT
+    behavior_type,
+    COUNT(*) AS cnt,
+    ROUND(COUNT(*) * 100.0 / total.total_cnt, 2) AS ratio
+FROM user_behavior, (
+    SELECT COUNT(*) AS total_cnt FROM user_behavior
+) total
+GROUP BY behavior_type;
+
+-- 结果：
+-- pv(浏览详情)   ~90.0%
+-- cart/fav(加购收藏) 8.2%
+-- buy(下单购买)   2.1%</code>
+            </pre>
+
+                <p class="text-gray-400 text-xs mb-2">▌活跃度衰减打分逻辑（示例）</p>
+                <pre class="code-block">
+<code># 指数衰减系数：越近权重越高
+def weight(day_offset):
+    return 1 / (1.07 ** (day_offset - 1))
+
+# 计算单个用户在观察期内的活跃分
+def active_score(active_days):
+    score = 0.0
+    for i, is_active in enumerate(active_days, start=1):
+        score += weight(i) * is_active   # DAY_i ∈ {0,1}
+    return score
+
+# 按 Score 分层，识别高价值流失风险用户</code>
+            </pre>
+            </div>
+
+            <!-- 研究结论 -->
+            <div>
+                <p class="text-gray-300 text-sm font-medium mb-3">✨ 研究结论与启示</p>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="p-3 rounded bg-dark-800/60 border border-gray-700/50">
+                        <p class="text-white font-medium mb-1">精准识别</p>
+                        <p class="text-gray-400">活跃衰减分能量化区分高/中/低活跃用户，提前预警</p>
+                    </div>
+                    <div class="p-3 rounded bg-dark-800/60 border border-gray-700/50">
+                        <p class="text-white font-medium mb-1">分层挽回</p>
+                        <p class="text-gray-400">按用户价值差异化触达，高价值客户专属服务</p>
+                    </div>
+                    <div class="p-3 rounded bg-dark-800/60 border border-gray-700/50">
+                        <p class="text-white font-medium mb-1">数据驱动</p>
+                        <p class="text-gray-400">以满意度/回购率/流失率/销售额闭环评估策略效果</p>
+                    </div>
+                    <div class="p-3 rounded bg-dark-800/60 border border-gray-700/50">
+                        <p class="text-white font-medium mb-1">体验为本</p>
+                        <p class="text-gray-400">淘宝/亚马逊案例启示：个性化推荐 + 高效物流是留存关键</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 弹窗模块 -->
+
+
 
     <!-- 联系方式 -->
     <section id="contact" class="py-24 section-reveal">
